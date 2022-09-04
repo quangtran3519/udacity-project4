@@ -14,6 +14,14 @@ export const handler = middy(
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     };
+    if(!newTodo.name||newTodo.name.trim()==""){
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error : `Todo name is required`
+        })
+      }
+    }
     try {
       const userId: string = getUserId(event)
       const todoItem: TodoItem = await createTodo(userId, newTodo)
