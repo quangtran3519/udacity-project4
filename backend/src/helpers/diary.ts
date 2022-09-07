@@ -1,18 +1,18 @@
-import { TodosAccess } from './todosAcess'
+import { DiaryAccess } from './diaryAccess'
 import { generatePresignedUrl, getAttachmentUrl } from './attachmentUtils';
-import { TodoItem } from '../models/TodoItem'
-import { CreateTodoRequest } from '../requests/CreateTodoRequest'
-import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
+import { DiaryItem } from '../models/DiaryItem'
+import { CreateTodoRequest } from '../requests/CreateDiaryRequest'
+import { UpdateTodoRequest } from '../requests/UpdateDiaryRequest'
 import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
 
-const todoAccess = new TodosAccess();
+const todoAccess = new DiaryAccess();
 const logger = createLogger('Todos')
 
 
 export async function getTodosForUser(
   userId: string
-): Promise<TodoItem[]> {
+): Promise<DiaryItem[]> {
   logger.info("getTodosForUser")
   return todoAccess.getTodos(userId);
 }
@@ -21,11 +21,11 @@ export async function getTodosForUser(
 export async function createTodo(
   userId: string,
   newTodoData: CreateTodoRequest
-): Promise<TodoItem> {
+): Promise<DiaryItem> {
   const todoId = uuid.v4();
   const createdAt = new Date().toISOString();
   const done = false;
-  const newTodo: TodoItem = { todoId, userId, createdAt, done, ...newTodoData };
+  const newTodo: DiaryItem = { todoId, userId, createdAt, done, ...newTodoData };
   logger.info("createTodo")
   return todoAccess.createTodo(newTodo);
 }

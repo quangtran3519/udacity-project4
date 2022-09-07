@@ -4,8 +4,8 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 
-import { updateTodo } from '../../helpers/todos'
-import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
+import { updateTodo } from '../../helpers/diary'
+import { UpdateTodoRequest } from '../../requests/UpdateDiaryRequest'
 import { getUserId } from '../utils'
 import { createLogger } from '../../utils/logger'
 

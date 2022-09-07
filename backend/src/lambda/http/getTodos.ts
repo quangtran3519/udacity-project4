@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 
-import { getTodosForUser as getTodosForUser } from '../../helpers/todos'
+import { getTodosForUser as getTodosForUser } from '../../helpers/diary'
 import { getUserId } from '../utils';
 import { createLogger } from '../../utils/logger'
 const logger = createLogger("getTodos")

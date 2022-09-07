@@ -3,20 +3,23 @@
   "title": "group",
   "type": "object",
   "properties": {
-    "name": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "urlImage": {
       "type": "string"
     },
     "dueDate": {
       "type": "string"
-    },
-    "done": {
-      "type": "boolean"
     }
   },
   "required": [
-    "name",
-    "dueDate",
-    "done"
+    "title",
+    "content",
+    "dueDate"
   ],
   "additionalProperties": false
 }
