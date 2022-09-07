@@ -1,12 +1,5 @@
-/**
- * Fields in a request to create a single TODO item.
- */
-export interface CreateTodoRequest {
-  userId: string
-  diaryId: string
-  createdAt: string
+export interface CreateDiaryRequest {
   title: string
-  dueDate: string
-  content: boolean
+  content: string
   urlImage?: string
 }

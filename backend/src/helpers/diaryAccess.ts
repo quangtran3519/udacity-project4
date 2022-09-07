@@ -28,20 +28,20 @@ export class DiaryAccess {
     return result.Items as DiaryItem[];
   }
 
-  async getDiary(userId: string, diaryId: string): Promise<DiaryItem> {
-    logger.info(`Getting todo item: ${diaryId}`);
+  async findDiariesByName(userId: string, name: string): Promise<DiaryItem[]> {
+    logger.info(`findDiariesByName diary item: ${name}`);
     const result = await this.docClient
       .query({
         TableName: this.diariesTable,
-        KeyConditionExpression: 'userId = :userId and diaryId = :diaryId',
+        KeyConditionExpression: 'userId = :userId and title = :title',
         ExpressionAttributeValues: {
           ':userId': userId,
-          ':diaryId': diaryId
+          ':title': name
         }
       })
       .promise();
-    const todoItem = result.Items[0];
-    return todoItem as DiaryItem;
+    const diaryItem = result.Items;
+    return diaryItem as DiaryItem[];
   }
 
   async createDiary(newDiary: DiaryItem): Promise<DiaryItem> {
@@ -63,11 +63,10 @@ export class DiaryAccess {
         "diaryId": diaryId,
         "userId": userId
       },
-      UpdateExpression: "set content = :content , dueDate = :dueDate , title = :title , urlImage = :urlImage",
+      UpdateExpression: "set content = :content , title = :title , urlImage = :urlImage",
       //  ExpressionAttributeNames: { '#n': 'name' },
       ExpressionAttributeValues: {
         ":content": diary.content,
-        ":dueDate": diary.dueDate,
         ":title": diary.title,
         ":urlImage": diary.urlImage
       },
@@ -85,14 +84,14 @@ export class DiaryAccess {
       .promise();
   }
 
-  async saveImgUrl(userId: string, todoId: string, bucketName: string): Promise<void> {
+  async saveImgUrl(userId: string, diaryId: string, bucketName: string): Promise<void> {
     await this.docClient
       .update({
         TableName: this.diariesTable,
-        Key: { userId, todoId },
-        UpdateExpression: 'set attachmentUrl = :attachmentUrl',
+        Key: { userId, diaryId },
+        UpdateExpression: 'set urlImage = :urlImage',
         ExpressionAttributeValues: {
-          ':attachmentUrl': bucketName
+          ':urlImage': bucketName
         }
       })
       .promise();

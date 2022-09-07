@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 
-import { deleteTodo } from '../../helpers/diary'
+import { deleteDiary } from '../../helpers/diary'
 import { getUserId } from '../utils'
 
 export const handler = middy(
@@ -14,9 +14,9 @@ export const handler = middy(
       'Access-Control-Allow-Credentials': true
     };
     try {
-      const todoId = event.pathParameters.todoId
+      const diaryId = event.pathParameters.diaryId
       const userId = getUserId(event)
-      await deleteTodo(userId, todoId)
+      await deleteDiary(userId, diaryId)
 
       return {
         statusCode: 200,

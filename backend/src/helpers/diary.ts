@@ -1,61 +1,63 @@
 import { DiaryAccess } from './diaryAccess'
-import { generatePresignedUrl, getAttachmentUrl } from './attachmentUtils';
+import { generatePresignedUrl } from './attachmentUtils';
 import { DiaryItem } from '../models/DiaryItem'
-import { CreateTodoRequest } from '../requests/CreateDiaryRequest'
-import { UpdateTodoRequest } from '../requests/UpdateDiaryRequest'
+import { CreateDiaryRequest } from '../requests/CreateDiaryRequest'
+import { UpdateDiaryRequest } from '../requests/UpdateDiaryRequest'
 import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
 
 const todoAccess = new DiaryAccess();
-const logger = createLogger('Todos')
+const logger = createLogger('Diaries')
 
 
-export async function getTodosForUser(
+export async function getDiarysForUser(
   userId: string
 ): Promise<DiaryItem[]> {
-  logger.info("getTodosForUser")
-  return todoAccess.getTodos(userId);
+  logger.info("getDiarysForUser")
+  return todoAccess.getDiaries(userId);
 }
 
 
-export async function createTodo(
+export async function findDiariesByName(
   userId: string,
-  newTodoData: CreateTodoRequest
-): Promise<DiaryItem> {
-  const todoId = uuid.v4();
-  const createdAt = new Date().toISOString();
-  const done = false;
-  const newTodo: DiaryItem = { todoId, userId, createdAt, done, ...newTodoData };
-  logger.info("createTodo")
-  return todoAccess.createTodo(newTodo);
+  title: string
+): Promise<DiaryItem[]> {
+  logger.info("getDiarysForUser")
+  return todoAccess.findDiariesByName(userId,title);
 }
 
-export async function updateTodo(
+
+export async function createDiary(
+  userId: string,
+  newDiaryData: CreateDiaryRequest
+): Promise<DiaryItem> {
+  const diaryId = uuid.v4();
+  const createdAt = new Date().toISOString();
+  const newDiary: DiaryItem = { userId, diaryId, createdAt, ...newDiaryData };
+  logger.info("createDiary")
+  return todoAccess.createDiary(newDiary);
+}
+
+export async function updateDiary(
   userId: string,
   todoId: string,
-  updateData: UpdateTodoRequest
+  updateData: UpdateDiaryRequest
 ): Promise<void> {
-  logger.info("updateTodo")
-  return todoAccess.updateTodo(userId, todoId, updateData);
+  logger.info("updateDiary")
+  return todoAccess.updateDiary(userId, todoId, updateData);
 }
 
-export async function deleteTodo(
+export async function deleteDiary(
   userId: string,
   todoId: string
 ): Promise<void> {
-  logger.info(`deleteTodo  ${userId}   ${todoId}`)
-  return todoAccess.deleteTodo(userId, todoId);
+  logger.info(`deleteDiary  ${userId}   ${todoId}`)
+  return todoAccess.deleteDiary(userId, todoId);
 }
 
-export async function createAttachmentPresignedUrl(
-  userId: string,
-  todoId: string
-): Promise<string> {
+export async function createAttachmentPresignedUrl(): Promise<string> {
   const img = uuid.v4()
   const url: string = generatePresignedUrl(img)
-  logger.info(`generatePresignedUrl  ${url}   ${todoId}`)
-
-  await todoAccess.saveImgUrl(userId, todoId, getAttachmentUrl(img));
-  logger.info(`saveImgUrl  ${getAttachmentUrl(img)}   ${todoId}`)
+  logger.info(`generatePresignedUrl  ${url}`)
   return url
 }

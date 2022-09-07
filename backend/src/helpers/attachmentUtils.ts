@@ -9,7 +9,7 @@ const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 
-const logger = createLogger('TodosAccess')
+const logger = createLogger('attachmentUtils')
 
 
 export function generatePresignedUrl(imageId: string) {

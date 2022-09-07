@@ -3,7 +3,6 @@ export interface DiaryItem {
   diaryId: string
   createdAt: string
   title: string
-  dueDate: string
-  content: boolean
+  content: string
   urlImage?: string
 }

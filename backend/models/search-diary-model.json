@@ -3,22 +3,12 @@
   "title": "group",
   "type": "object",
   "properties": {
-    "title": {
-      "type": "string"
-    },
-    "content": {
-      "type": "string"
-    },
-    "urlImage": {
-      "type": "string"
-    },
-    "dueDate": {
+    "value": {
       "type": "string"
     }
   },
   "required": [
-    "title",
-    "content"
+    "value"
   ],
   "additionalProperties": false
 }

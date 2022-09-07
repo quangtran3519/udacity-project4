@@ -1,9 +1,5 @@
-/**
- * Fields in a request to update a single TODO item.
- */
-export interface UpdateTodoRequest {
-  dueDate: string
+export interface UpdateDiaryRequest {
   title: string
-  content: boolean
+  content: string
   urlImage?: string
 }

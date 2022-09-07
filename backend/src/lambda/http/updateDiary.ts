@@ -4,12 +4,12 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 
-import { updateTodo } from '../../helpers/diary'
-import { UpdateTodoRequest } from '../../requests/UpdateDiaryRequest'
+import { updateDiary } from '../../helpers/diary'
+import { UpdateDiaryRequest } from '../../requests/UpdateDiaryRequest'
 import { getUserId } from '../utils'
 import { createLogger } from '../../utils/logger'
 
-const logger = createLogger("updateTodo")
+const logger = createLogger("updateDiary")
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -18,43 +18,35 @@ export const handler = middy(
       'Access-Control-Allow-Credentials': true
     };
     try {
-      const todoId = event.pathParameters.todoId
-      const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
-      if(!todoId||todoId.trim()===""){
+      const diaryId = event.pathParameters.diaryId
+      const updatedDiary: UpdateDiaryRequest = JSON.parse(event.body)
+      if(!diaryId||diaryId.trim()===""){
         return {
           statusCode: 400,
           body: JSON.stringify({
-            error: `Invalid todo id`
+            error: `Invalid diary id`
           })
         }
       }
-      if(!updatedTodo.name||updatedTodo.name.trim()==""){
+      if(!updatedDiary.title||updatedDiary.title.trim()==""){
         return {
           statusCode: 400,
           body: JSON.stringify({
-            error : `Todo name is required`
+            error : `Diary title is required`
           })
         }
       }
-      if(!updatedTodo.dueDate||updatedTodo.dueDate.trim()==""){
+      if(!updatedDiary.content||updatedDiary.content.trim()==""){
         return {
           statusCode: 400,
           body: JSON.stringify({
-            error : `Todo dueDate is required`
-          })
-        }
-      }
-      if(updatedTodo.done===undefined){
-        return {
-          statusCode: 400,
-          body: JSON.stringify({
-            error : `Todo dueDate is required`
+            error : `Diary content is required`
           })
         }
       }
       const userId: string = getUserId(event)
-      logger.info(`User ${userId} update todo item id ${todoId} ${updatedTodo}`)
-      await updateTodo(userId, todoId, updatedTodo)
+      logger.info(`User ${userId} update diary item id ${diaryId} ${updatedDiary}`)
+      await updateDiary(userId, diaryId, updatedDiary)
 
       return {
         statusCode: 200,
@@ -62,7 +54,7 @@ export const handler = middy(
         body: JSON.stringify(null)
       }
     } catch (error) {
-      logger.error(` update todo item id err  ${error}`)
+      logger.error(` update diary item id err  ${error}`)
       return {
         statusCode: 500,
         headers,

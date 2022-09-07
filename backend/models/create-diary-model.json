@@ -8,18 +8,11 @@
     },
     "content": {
       "type": "string"
-    },
-    "urlImage": {
-      "type": "string"
-    },
-    "dueDate": {
-      "type": "string"
     }
   },
   "required": [
     "title",
-    "content",
-    "dueDate"
+    "content"
   ],
   "additionalProperties": false
 }

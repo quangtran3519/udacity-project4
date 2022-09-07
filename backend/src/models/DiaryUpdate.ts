@@ -1,6 +1,5 @@
 export interface DiaryUpdate {
-  dueDate: string
   title: string
-  content: boolean
+  content: string
   urlImage?: string
 }
