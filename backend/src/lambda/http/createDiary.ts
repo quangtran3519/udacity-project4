@@ -8,6 +8,7 @@ import { createDiary } from '../../helpers/diary'
 import { DiaryItem } from '../../models/DiaryItem'
 import { createAttachmentPresignedUrl } from '../../helpers/diary'
 import { getAttachmentUrl } from '../../helpers/attachmentUtils'
+import * as uuid from 'uuid'
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -34,13 +35,14 @@ export const handler = middy(
     }
     try {
       const userId: string = getUserId(event)
-      const url: string = await createAttachmentPresignedUrl()
-      newDiary.urlImage = getAttachmentUrl(url)
+      const img = uuid.v4()
+      const url: string = await createAttachmentPresignedUrl(img)
+      newDiary.urlImage = getAttachmentUrl(img)
       const diaryItem: DiaryItem = await createDiary(userId, newDiary)
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ item: diaryItem })
+        body: JSON.stringify({ item: diaryItem, url: url })
       }
     } catch (error) {
       return {

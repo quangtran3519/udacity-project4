@@ -55,8 +55,8 @@ export async function deleteDiary(
   return todoAccess.deleteDiary(userId, todoId);
 }
 
-export async function createAttachmentPresignedUrl(): Promise<string> {
-  const img = uuid.v4()
+export async function createAttachmentPresignedUrl(img :string): Promise<string> {
+ 
   const url: string = generatePresignedUrl(img)
   logger.info(`generatePresignedUrl  ${url}`)
   return url

@@ -93,7 +93,7 @@ functions:
           - "xray:PutTelemetryRecords"
         Resource:
           - "*"
-       - Effect: Allow
+      - Effect: Allow
         Action:
           - s3:PutObject
           - s3:GetObject
@@ -103,7 +103,7 @@ functions:
     handler: src/lambda/http/updateDiary.handler
     events:
       - http:
-          method: patch
+          method: put
           cors: true
           authorizer: Auth
           path: diaries/{diaryId}
@@ -151,13 +151,8 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:GetItem
+          - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DIARIES_TABLE}
-      - Effect: Allow
-        Action:
-          - s3:PutObject
-          - s3:GetObject
-        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
       - Effect: "Allow"
         Action:
           - "xray:PutTraceSegments"
@@ -189,13 +184,7 @@ resources:
           - AttributeName: diaryId
             AttributeType: S
           - AttributeName: createdAt
-            AttributeType: S
-          - AttributeName: title
             AttributeType: S  
-          - AttributeName: content
-            AttributeType: S
-          - AttributeName: urlImage
-            AttributeType: S    
         KeySchema:
           - AttributeName: userId
             KeyType: HASH

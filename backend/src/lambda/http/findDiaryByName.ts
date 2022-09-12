@@ -7,22 +7,20 @@ import { cors } from 'middy/middlewares'
 import { findDiariesByName } from '../../helpers/diary'
 import { getUserId } from '../utils';
 import { createLogger } from '../../utils/logger'
-import { SearchDiaryRequest } from '../../requests/SearchDiaryRequest'
 const logger = createLogger("findDiariesByName")
 
 export const handler = middy(
     async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-
         const headers = {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true
         };
-        try {
+        const name: string =  event.queryStringParameters["name"]
 
+        try {
             const userId: string = getUserId(event)
-            const name: SearchDiaryRequest = JSON.parse(event.body)
-            logger.error(` findDiariesByName  ${name.value}`)
-            const diarys = await findDiariesByName(userId, name.value)
+            logger.info(` findDiariesByName  ${name}`)
+            const diarys = await findDiariesByName(userId, name)
             return {
                 statusCode: 200,
                 headers,

@@ -21,6 +21,8 @@ export function generatePresignedUrl(imageId: string) {
     })
 }
 
+
+
 export function getAttachmentUrl(imageId:string){
     return `https://${bucketName}.s3.amazonaws.com/${imageId}`
 }

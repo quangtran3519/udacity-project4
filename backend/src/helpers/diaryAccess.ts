@@ -11,7 +11,7 @@ const logger = createLogger('DiaryAccess')
 export class DiaryAccess {
   constructor(
     private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
-    private readonly diariesTable = process.env.TODOS_TABLE
+    private readonly diariesTable = process.env.DIARIES_TABLE
   ) { }
 
   async getDiaries(userId: string): Promise<DiaryItem[]> {
@@ -33,10 +33,11 @@ export class DiaryAccess {
     const result = await this.docClient
       .query({
         TableName: this.diariesTable,
-        KeyConditionExpression: 'userId = :userId and title = :title',
+        KeyConditionExpression: 'userId = :userId',
+        FilterExpression: ' contains(content, :key) or contains (title, :key)',
         ExpressionAttributeValues: {
-          ':userId': userId,
-          ':title': name
+          ':key': name,
+          ':userId': userId
         }
       })
       .promise();
@@ -63,12 +64,11 @@ export class DiaryAccess {
         "diaryId": diaryId,
         "userId": userId
       },
-      UpdateExpression: "set content = :content , title = :title , urlImage = :urlImage",
+      UpdateExpression: "set content = :content , title = :title ",
       //  ExpressionAttributeNames: { '#n': 'name' },
       ExpressionAttributeValues: {
         ":content": diary.content,
         ":title": diary.title,
-        ":urlImage": diary.urlImage
       },
       ReturnValues: "UPDATED_NEW"
     }).promise()

@@ -4,5 +4,5 @@ export interface DiaryItem {
   createdAt: string
   title: string
   content: string
-  urlImage?: string
+  urlImage: string
 }
